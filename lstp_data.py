@@ -81,6 +81,13 @@ class LSTPData(Dataset):
         return 1.0
 
     @property
+    def batch_size(self):
+        if 'data_params' in self.config:
+            if 'batch_size' in self.config['data_params']:
+                return self.config['data_params']['batch_size']
+        return 64
+
+    @property
     def width(self):
         return self.data.shape[3]
 

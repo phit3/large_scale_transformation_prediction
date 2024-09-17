@@ -7,10 +7,9 @@ data_params:
   data_fname: D1_train
   data_min: -0.6
   data_max: 0.6
+  batch_size: 64
 lstp_params:
   learning_rate: 1.0e-4
-  batch_size: 64
-  num_augs: 7
   num_features: 256
   epochs: 10000
   patience: 30

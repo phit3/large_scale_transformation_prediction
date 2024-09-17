@@ -14,7 +14,6 @@ try:
         config = yaml.load(f, Loader=yaml.FullLoader)
 except Exception as e:
     print(f'Could not load config: {e}')
-lstp = LSTPController(config)
 
 # load raw data
 print('Loading data...')
@@ -42,10 +41,14 @@ train_ds = LSTPData(train, config, subset='train')
 valid_ds = LSTPData(valid, config, subset='valid')
 test_ds = LSTPData(test, config, subset='test')
 
-train_dl = DataLoader(dataset=train_ds, batch_size=lstp.batch_size, shuffle=True, drop_last=True)
-valid_dl = DataLoader(dataset=valid_ds, batch_size=lstp.batch_size, shuffle=False, drop_last=True)
-test_dl = DataLoader(dataset=test_ds, batch_size=lstp.batch_size, shuffle=False, drop_last=False)
+batch_size = train_ds.batch_size
+train_dl = DataLoader(dataset=train_ds, batch_size=batch_size, shuffle=True, drop_last=True)
+valid_dl = DataLoader(dataset=valid_ds, batch_size=batch_size, shuffle=False, drop_last=True)
+test_dl = DataLoader(dataset=test_ds, batch_size=batch_size, shuffle=False, drop_last=False)
 
+config['lstp_params']['batch_size'] = batch_size
+config['lstp_params']['num_augs'] = len(train_ds.aug_pool)
+lstp = LSTPController(config)
 if config['lstp_params']['load_cp']:
     print('Loading checkpoint of LSTP...')
     lstp.load_cp()
