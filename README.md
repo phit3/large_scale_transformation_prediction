@@ -46,5 +46,5 @@ python3 main.py
 
 On the first run, you will want to train the LSTP model from scratch. In later runs you can set the load_cp: true in the config and it will try to load the checkpoint that is created during the first run.
 The first step is the clustering, and the script will create a visualization of the clusters and save it as peaks.png.
-The training will be the most time intensive step. Therefore, the script saves the checkpoint of the best validation loss epoch in the checkpoints directory. The checkpoint will be named according to the cp_file_name that was set in the config.
+The training will be the most time intensive step. Therefore, the script saves the checkpoint of the best validation loss epoch in the checkpoints directory. The checkpoint will be named according to the cp_fname that was set in the config.
 During inference the model predicts the transformations between structures from the clustering. In the end it will output the support value for each augmentation of the augmentation pool (it is currently fixed to the augmentations used in the paper).
