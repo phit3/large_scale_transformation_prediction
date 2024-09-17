@@ -1,5 +1,5 @@
 # Large-scale transformation prediction
-Large-scale transformation prediction (LSTP) constists of three steps: time-constraing clustering, LSTP training and LSTP inference. We provide a separate script for each step.
+Large-scale transformation prediction (LSTP) consists of three steps: time-constraing clustering, LSTP training and LSTP inference. We provide a separate script for each step.
 
 ## Data retrieval
 The data from the corresponding paper can be retrieved from Dataverse via wget
