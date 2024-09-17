@@ -29,6 +29,7 @@ Modify the config file (config.yaml) as needed. It contains an example config, w
 Exectue the LSTP procedure by running the main.py script.
 
 ```bash
+cd /path/to/project
 python3 main.py
 ```
 
