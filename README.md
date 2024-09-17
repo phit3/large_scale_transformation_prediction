@@ -24,6 +24,12 @@ Move the data set into the data folder (example D1.npy):
 mv /path/to/D1.npy /path/to/project/data
 ```
 
+Change the working directory to the project directory:
+
+```bash
+cd /path/to/project
+```
+
 Modify the config file (config.yaml) as needed. It contains an example config, which should be straight forward to adapt. At least the file name base (data_fname) of your dataset and the checkpoint file name (cp_fname) should be set accordingly.
 
 ```yaml
@@ -40,7 +46,6 @@ lstp_params:
 Exectue the LSTP procedure by running the main.py script.
 
 ```bash
-cd /path/to/project
 python3 main.py
 ```
 
