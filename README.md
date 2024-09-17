@@ -14,7 +14,7 @@ Alternatively, you can follow this link: https://doi.org/10.7910/DVN/07RT92 and 
 
 You can also use a custom snapshot data set. Ensure that the snapshots are ordered in time and saved as numpy array in a numpy file (.npy) with the shape (snapshot, 1, height, width). Create a data folder in the root directory of the project and move your data set(s) there.
 
-Create a checkpoints folder and modify the config file (config.yaml) as needed. It contains an example config, which should be straight forward to adapt. At least the meta data of your dataset should be set accordingly: data_fname, data_min, data_max.
+Create a checkpoints folder and modify the config file (config.yaml) as needed. It contains an example config, which should be straight forward to adapt. At least the file name base (data_fname) of your dataset should be set accordingly.
 
 Exectue the LSTP procedure by running the main.py script.
 
