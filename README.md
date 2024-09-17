@@ -26,6 +26,13 @@ mv /path/to/D1.npy /path/to/project/data
 
 Modify the config file (config.yaml) as needed. It contains an example config, which should be straight forward to adapt. At least the file name base (data_fname) of your dataset should be set accordingly.
 
+```yaml
+data_params:
+  ...
+  data_fname: D1
+  ...
+```
+
 Exectue the LSTP procedure by running the main.py script.
 
 ```bash
