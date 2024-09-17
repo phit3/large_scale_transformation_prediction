@@ -24,7 +24,7 @@ Move the data set into the data folder (example D1.npy):
 mv /path/to/D1.npy /path/to/project/data
 ```
 
-Modify the config file (config.yaml) as needed. It contains an example config, which should be straight forward to adapt. At least the file name base (data_fname) of your dataset should be set accordingly.
+Modify the config file (config.yaml) as needed. It contains an example config, which should be straight forward to adapt. At least the file name base (data_fname) of your dataset and the checkpoint file name (cp_fname) should be set accordingly.
 
 ```yaml
 data_params:
