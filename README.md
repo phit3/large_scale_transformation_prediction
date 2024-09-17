@@ -15,8 +15,8 @@ Alternatively, you can follow this link: https://doi.org/10.7910/DVN/07RT92 and 
 You can also use a custom snapshot data set. Ensure that the snapshots are ordered in time and saved as numpy array in a numpy file (.npy) with the shape (snapshot, 1, height, width). Create a checkpoints and a data folder in the root directory of the project:
 
 ```bash
-mkdir checkpoints
-mkdir data
+mkdir /path/to/project/checkpoints
+mkdir /path/to/project/data
 ```
 
 Move the data set into the data folder (example D1.npy):
