@@ -1,0 +1,16 @@
+data_params:
+  c_size: 500
+  c_min: 500
+  c_max: 1000
+  c_shift: 10
+  pre_shuffle: True
+  data_fname: D2
+  batch_size: 64
+lstp_params:
+  learning_rate: 1.0e-4
+  num_features: 128
+  epochs: 100000
+  patience: 500
+  load_cp: true
+  cp_fname: D2_demo
+  infer_steps: 100
