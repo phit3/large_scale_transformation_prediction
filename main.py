@@ -9,6 +9,12 @@ from lstp_data import LSTPData
 from lstp_controller import LSTPController
 from time_constrained_clustering import TimeConstrainedClustering
 
+# check workspace
+if not os.path.exists('data'):
+    os.makedirs('data')
+if not os.path.exists('checkpoints'):
+    os.makedirs('checkpoints')
+
 # load config
 print('Loading config...')
 try:
