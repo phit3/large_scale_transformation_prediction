@@ -8,7 +8,7 @@ class LSTP(torch.nn.Module):
         self.batch_size = batch_size
         self.num_augs = num_augs
         self.num_features = num_features
-        self.drop_p = 0.3
+        self.drop_p = 0.1
         self.combine_kernel_size = 3
 
         res = resnet50(pretrained=False)
@@ -18,7 +18,6 @@ class LSTP(torch.nn.Module):
         res_layers[0] = torch.nn.Conv2d(in_channels=1, out_channels=64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
         self.state_size = list(list(res_layers[-1].children())[-1].children())[-3].out_channels
 
-        # init blur layer
         self.conv_model = torch.nn.Sequential(*res_layers)
 
         self.conv_combine_states = torch.nn.Conv2d(self.state_size * 2, self.state_size, kernel_size=self.combine_kernel_size)

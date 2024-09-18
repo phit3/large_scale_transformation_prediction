@@ -1,19 +1,16 @@
 data_params:
-  c_size: 500
-  c_min: 1000
-  c_max: 2000
-  c_shift: 20
+  c_size: 300
+  c_min: 300
+  c_max: 500
+  c_shift: 10
   pre_shuffle: True
-  data_fname: D1_train
-  data_min: -0.6
-  data_max: 0.6
+  data_fname: D3
   batch_size: 64
 lstp_params:
   learning_rate: 1.0e-4
-  num_features: 256
-  epochs: 10000
-  patience: 30
-  cp_name: lstp_test_1
+  num_features: 128
+  epochs: 100000
+  patience: 500
   load_cp: true
+  cp_fname: D3_demo
   infer_steps: 100
-  

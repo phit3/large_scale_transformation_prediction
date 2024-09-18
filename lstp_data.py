@@ -7,14 +7,12 @@ from skimage import transform
 class Augmentations:
     @staticmethod
     def x_flip(x, p=1.0):
-        if p > 0.5:
-            x = torch.flip(x, dims=[2])
+        x = torch.flip(x, dims=[2])
         return x
 
     @staticmethod
     def y_flip(x, p=1.0):
-        if p > 0.5:
-            x = torch.flip(x, dims=[1])
+        x = torch.flip(x, dims=[1])
         return x
 
     @staticmethod
@@ -33,8 +31,7 @@ class Augmentations:
 
     @staticmethod
     def value_inversion(x, p=1.0):
-        if p > 0.5:
-            x = x.max() - x + x.min()
+        x = x.max() - x + x.min()
         return x
 
     @staticmethod
@@ -43,10 +40,15 @@ class Augmentations:
         x = torch.cat([x[:, :, :], x, x[:, :, :]], dim=2)
         x = x[0]
         
-        p = (p - 0.5) * 2.0
-        ps = np.sign(p) or 1.0
-
-        shear = ps * 0.05 + p * 0.1
+        if p <= 0.5:
+            p *= 2.0
+            ps = -1.0
+        else:
+            p = 2.0 * p - 1.0
+            ps = 1.0
+        
+        shear = ps * (0.05 + (p * 0.1))
+        
         tf = transform.AffineTransform(shear=shear)
         x = transform.warp(x, tf)
         x = torch.tensor(x[:, w: w + w]).unsqueeze(0)
@@ -66,20 +68,6 @@ class Augmentations:
         return x
 
 class LSTPData(Dataset):
-    @property
-    def data_min(self):
-        if 'data_params' in self.config:
-            if 'data_min' in self.config['data_params']:
-                return self.config['data_params']['data_min']
-        return 0.0
-
-    @property
-    def data_max(self):
-        if 'data_params' in self.config:
-            if 'data_max' in self.config['data_params']:
-                return self.config['data_params']['data_max']
-        return 1.0
-
     @property
     def batch_size(self):
         if 'data_params' in self.config:
@@ -112,31 +100,36 @@ class LSTPData(Dataset):
     def __len__(self):
         return self.data.shape[0]
 
-    #def __init__(self, config, subset):
-    def __init__(self, data, config, subset):
+    def __init__(self, data, config, subset, data_min=None, data_max=None):
         self.config = config
         self.subset = subset
-        #raw_data = np.load(os.path.join('data', f'{self.data_fname}_{self.subset}.npy'))
-        #self.data = np.array([raw_data[i: i + self.c_size].mean(0) for i in range(raw_data.shape[0] - self.c_size + 1)])
         self.data = data
+
+        self.data_min = data_min if data_min is not None else self.data.min()
+        self.data_max = data_max if data_max is not None else self.data.max()
         
         self.aug = Augmentations()
         if self.width == self.height:
-            self.aug_pool = [self.aug.x_flip, self.aug.y_flip, self.aug.x_cyclic_shift, self.aug.y_cyclic_shift, self.aug.value_inversion, self.aug.x_shear, self.aug.y_shear, self.aug.rotate]
+            self.aug_pool = [self.aug.x_flip, self.aug.y_flip, self.aug.value_inversion, self.aug.x_cyclic_shift, self.aug.y_cyclic_shift, self.aug.x_shear, self.aug.y_shear, self.aug.rotate]
         else:
-            self.aug_pool = [self.aug.x_flip, self.aug.y_flip, self.aug.x_cyclic_shift, self.aug.y_cyclic_shift, self.aug.value_inversion, self.aug.x_shear, self.aug.y_shear]
+            self.aug_pool = [self.aug.x_flip, self.aug.y_flip, self.aug.value_inversion, self.aug.x_cyclic_shift, self.aug.y_cyclic_shift, self.aug.x_shear, self.aug.y_shear]
 
     def augment(self, x, transf):
         for i, aug in enumerate(self.aug_pool):
-            #print(i, aug.__name__, transf[i].item())
-            x = aug(x, transf[i])
+            if transf[i] > 0.5:
+                x = aug(x, np.random.rand())
+        return x
+
+    def fix_augment(self, x, transf):
+        for i, aug in enumerate(self.aug_pool):
+            if transf[i] > 0.5:
+                x = aug(x, (transf[i] - 0.5) * 2.0)
         return x
 
     def __getitem__(self, idx):
         x = torch.from_numpy(self.data[idx, :, :, :])
         x = (x - self.data_min) / (self.data_max - self.data_min)
-        # pre augment
-        #if self.subset == 'train':
+
         pre_transf = torch.randint(0, 2, (len(self.aug_pool),))
         x = self.augment(x, pre_transf)
 

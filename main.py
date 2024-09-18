@@ -1,6 +1,8 @@
 import yaml
 from torch.utils.data import DataLoader
 import numpy as np
+import torch
+import random
 import os
 
 from lstp_data import LSTPData
@@ -14,6 +16,13 @@ try:
         config = yaml.load(f, Loader=yaml.FullLoader)
 except Exception as e:
     print(f'Could not load config: {e}')
+
+# set seeds
+seed = config['seed'] if 'seed' in config else 0
+torch.manual_seed(seed)
+torch.cuda.manual_seed(seed)
+np.random.seed(seed)
+random.seed(seed)
 
 # load raw data
 print('Loading data...')
@@ -38,8 +47,8 @@ valid = data[idxs[int(len(idxs) * 0.8): int(len(idxs) * 0.9)]]
 test = data[idxs[int(len(idxs) * 0.9):]]
 
 train_ds = LSTPData(train, config, subset='train')
-valid_ds = LSTPData(valid, config, subset='valid')
-test_ds = LSTPData(test, config, subset='test')
+valid_ds = LSTPData(valid, config, subset='valid', data_min=train_ds.data_min, data_max=train_ds.data_max)
+test_ds = LSTPData(test, config, subset='test', data_min=train_ds.data_min, data_max=train_ds.data_max)
 
 batch_size = train_ds.batch_size
 train_dl = DataLoader(dataset=train_ds, batch_size=batch_size, shuffle=True, drop_last=True)
@@ -51,10 +60,14 @@ config['lstp_params']['num_augs'] = len(train_ds.aug_pool)
 lstp = LSTPController(config)
 if config['lstp_params']['load_cp']:
     print('Loading checkpoint of LSTP...')
-    lstp.load_cp()
+    try:
+        lstp.load_cp()
+    except Exception as e:
+        print(f'Could not load checkpoint: {e}') 
+        lstp.train(train_dl, valid_dl)
 else:
     print('Training LSTP...')
     lstp.train(train_dl, valid_dl)
 
 # lstp inference
-lstp.infer(clustering)
+lstp.infer(clustering, test_dl)
