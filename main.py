@@ -48,13 +48,23 @@ data = np.array([raw_data[i: i + c_size].mean(0) for i in range(raw_data.shape[0
 idxs = np.arange(len(data))
 if 'data_params' in config and 'pre_shuffle' in config['data_params'] and config['data_params']['pre_shuffle']:
     np.random.shuffle(idxs)
+
+if 'data_params' in config and 'samples' in config['data_params']:
+    samples = config['data_params']['samples']
+else:
+    samples = len(data)
+
+train_samples = int(samples * 0.8)
+valid_samples = int(samples * 0.1)
+test_samples = samples - train_samples - valid_samples
+
 train = data[idxs[:int(len(idxs) * 0.8)]]
 valid = data[idxs[int(len(idxs) * 0.8): int(len(idxs) * 0.9)]]
 test = data[idxs[int(len(idxs) * 0.9):]]
 
-train_ds = LSTPData(train, config, subset='train')
-valid_ds = LSTPData(valid, config, subset='valid', data_min=train_ds.data_min, data_max=train_ds.data_max)
-test_ds = LSTPData(test, config, subset='test', data_min=train_ds.data_min, data_max=train_ds.data_max)
+train_ds = LSTPData(train, config, subset='train', samples=train_samples)
+valid_ds = LSTPData(valid, config, subset='valid', data_min=train_ds.data_min, data_max=train_ds.data_max, samples=valid_samples)
+test_ds = LSTPData(test, config, subset='test', data_min=train_ds.data_min, data_max=train_ds.data_max, samples=test_samples)
 
 batch_size = train_ds.batch_size
 train_dl = DataLoader(dataset=train_ds, batch_size=batch_size, shuffle=True, drop_last=True)

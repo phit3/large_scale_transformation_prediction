@@ -97,12 +97,14 @@ class LSTPData(Dataset):
         return 500
 
     def __len__(self):
-        return self.data.shape[0]
+        return self.samples
 
-    def __init__(self, data, config, subset, data_min=None, data_max=None):
+    def __init__(self, data, config, subset, data_min=None, data_max=None, samples=None):
         self.config = config
         self.subset = subset
         self.data = data
+
+        self.samples = samples if samples is not None else self.data.shape[0]
 
         self.data_min = data_min if data_min is not None else self.data.min()
         self.data_max = data_max if data_max is not None else self.data.max()
@@ -126,6 +128,8 @@ class LSTPData(Dataset):
         return x
 
     def __getitem__(self, idx):
+        if idx >= self.data.shape[0]:
+            idx = np.random.randint(0, self.data.shape[0])
         x = torch.from_numpy(self.data[idx, :, :, :])
         x = (x - self.data_min) / (self.data_max - self.data_min)
 
