@@ -170,6 +170,7 @@ class LSTPController:
                     inputs.append(inpt)
                 # stack inputs
                 inputs = np.stack(inputs)
+                inputs = (inputs - test_dl.dataset.data_min) / (test_dl.dataset.data_max - test_dl.dataset.data_min)
                 # infer the predicted transformation
                 transform = self.lstp(torch.tensor(inputs).cuda())
                 transform[transform >= 0.5] = 1
