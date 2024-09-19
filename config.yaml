@@ -1,16 +1,17 @@
 data_params:
-  c_size: 300
-  c_min: 300
-  c_max: 500
+  c_size: 500
+  c_min: 1000
+  c_max: 4000
   c_shift: 10
   pre_shuffle: True
-  data_fname: D3
+  data_fname: D1
   batch_size: 64
+  samples: 10000
 lstp_params:
   learning_rate: 1.0e-4
   num_features: 128
   epochs: 100000
   patience: 500
   load_cp: true
-  cp_fname: D3_demo
+  cp_fname: D1_demo
   infer_steps: 100
