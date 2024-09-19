@@ -63,8 +63,7 @@ class Augmentations:
 
     @staticmethod
     def rotate(x, p=1.0):
-        if p > 0.5:
-            x = torch.rot90(x, dims=[1, 2])
+        x = torch.rot90(x, dims=[1, 2])
         return x
 
 class LSTPData(Dataset):
