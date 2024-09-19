@@ -1,7 +1,12 @@
 # Large-scale transformation prediction
 Large-scale transformation prediction (LSTP) consists of three steps: time-constraing clustering, LSTP training and LSTP inference. We provide a separate script for each step.
 
-## Data retrieval
+Before running any script in the project, please make sure that your system has all required python libraries installed:
+
+```bash
+pip3 install -r requirements.txt
+```
+
 The data from the corresponding paper can be retrieved from Dataverse at https://doi.org/10.7910/DVN/07RT92. Download the data via your favorite browser.
 
 You can also use a custom snapshot data set. Ensure that the snapshots are ordered in time and saved as numpy array in a numpy file (.npy) with the shape (snapshot, 1, height, width). Create a checkpoints and a data folder in the root directory of the project:
