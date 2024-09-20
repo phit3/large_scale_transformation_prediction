@@ -161,11 +161,6 @@ class LSTPController:
                     s1 = clustering.get_random_structure(c_idx1)
                     s2 = clustering.get_random_structure(c_idx2)
                     
-                    # apply the same random transformation on both structures to keep distribution
-                    pre_transf = torch.rand((self.num_augs,))
-                    s1 = test_dl.dataset.fix_augment(torch.tensor(s1), pre_transf).cpu().numpy()
-                    s2 = test_dl.dataset.fix_augment(torch.tensor(s2), pre_transf).cpu().numpy()
-        
                     inpt = np.concatenate([s1, s2], 0)
                     inputs.append(inpt)
                 # stack inputs
